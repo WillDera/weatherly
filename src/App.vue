@@ -9,7 +9,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
       <a class="navbar-brand" href="#">Weatherly</a>
     </nav>
     <main class="container mt-2">
-      <router-view/>
+      <RouterView/>
     </main>
   </div>
 </template>
