@@ -28,9 +28,10 @@
           </div>
           <div class="card-header2">
                 <h3 class="col">{{ days[new Date().getDay()+1] }}</h3>
-                <span class="col"><img :src=icons[forecast.daily.icon]></span>
+                <!-- <span class="col"><img :src=icons[forecast.weather.icon]></span> -->
+                <span>{{forecast}}</span>
                 <span class="col minMax">
-                  <h3>{{forecast.daily.data[0].temperatureMax}} 	&#8451;</h3>
+                  <!-- <h3>{{forecast.daily.data[0].temperatureMax}} 	&#8451;</h3> -->
                 </span>
             </div>
         </div>
@@ -43,6 +44,7 @@
 
 // @ is an alias to /src
 import API from '../lib/API.js';
+import NProgress from 'nprogress'
 
 export default {
   name: 'home',
@@ -92,28 +94,18 @@ export default {
     };
   },
   mounted() {
-    this.loadWeather(localStorage.lat || '3.0008', localStorage.lon || '-5.6789');
+    // this.loadWeather(localStorage.lat || '3.0008', localStorage.lon || '-5.6789');
+    // this.loadWeather(location || 'lagos')
   },
   methods: {
-    loadWeather(lat, lon) {
-      localStorage.lat = lat;
-      localStorage.lon = lon;
-      API.getAddress(lat, lon).then(result => {
-        this.address = result.name;
-        localStorage.address = this.address;
-      });
-      API.getForecast(lat, lon).then(result => {
-        console.log(result);
-          this.forecast = result;
-          NProgress.done()
-      });
-    },
     updateLocation() {
       NProgress.start();
-      localStorage.location = this.location;
-      API.getCoordinates(this.location).then(result => {
-        this.loadWeather(result.latitude, result.longitude);
-      })
+      let loc = localStorage.location || 'lagos'
+      API.getForecast(loc).then(result => {
+        this.forecast = result;
+          NProgress.done()
+        console.log(JSON.stringify(this.forecast));
+      });
     }
   }
 };
