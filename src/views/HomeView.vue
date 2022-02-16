@@ -10,30 +10,24 @@
             </div>
           </div>
           <div class="card-header">
-            <h2 class="col-6">{{address}}</h2>
-            <h4 class="col-6">{{ new Date().getFullYear()+' '+months[new Date().getMonth()]+' '+ new Date().getDate()}}</h4>
+            <h2 class="col-6">{{location}}</h2>
+            <h4 class="col-6">{{ new Date().getFullYear()+' '+months[new Date().getMonth()]+' '+ new Date().getDate()+","+days[new Date().getDay()]}}</h4>
           </div>
           <div class="card-body" v-if="forecast">
             <div class="weather-details col-6">
-              <h3>{{ days[new Date().getDay()] }}</h3>
-              <h4>Humidity {{forecast.currently.humidity*100}}&#37;</h4>
-              <h4>Precipitation Type: {{forecast.currently.precipType}}</h4>
-              <h4>Timezone: {{forecast.timezone}}</h4>
-              <h1>{{forecast.currently.temperature}} 	&#8451;</h1>
+              <h4>Humidity {{forecast.main.humidity}}&#37;</h4> 
+              <h3>Temp: {{forecast.main.temp}} 	&#8451;</h3>
+              <h3>feel's like: {{forecast.main.feels_like}} 	&#8451;</h3>
             </div>
             <div class="weather-info col-6">
-              <img :src=icons[forecast.currently.icon]>
-              <h3>{{forecast.currently.summary}} </h3>
+              <img :src=icons[forecast.weather[0].icon] />
+              <h3>Main: {{forecast.weather[0].main}} </h3>
+              <h3>Description: {{forecast.weather[0].description}} </h3>
+              <h3>Wind speed: {{forecast.wind.speed}} m/s </h3>
+              <h3>Sunrise: {{forecast.sys.sunrise}} </h3>
+              <h3>Sunset: {{forecast.sys.sunset}} </h3>
             </div>
           </div>
-          <div class="card-header2">
-                <h3 class="col">{{ days[new Date().getDay()+1] }}</h3>
-                <!-- <span class="col"><img :src=icons[forecast.weather.icon]></span> -->
-                <span>{{forecast}}</span>
-                <span class="col minMax">
-                  <!-- <h3>{{forecast.daily.data[0].temperatureMax}} 	&#8451;</h3> -->
-                </span>
-            </div>
         </div>
       </div>
     </div>
@@ -45,13 +39,13 @@
 // @ is an alias to /src
 import API from '../lib/API.js';
 import NProgress from 'nprogress'
+import clear from "../assets/icons8-night-100.png"
 
 export default {
   name: 'home',
   data() {
     return {
-      location: localStorage.location || "",
-      address: localStorage.address || '',
+      location: this.location || "",
       days: {
         0:"Sunday",
         1:"Monday",
@@ -77,19 +71,25 @@ export default {
         },
       forecast: null,
       icons: {
-        'clear-day':'../assets/icons8-sun-100.png',
-        'clear-night': '../assets/icons8-night-100.png',
-        'rain': '../assets/icons8-rainy-weather-100.png',
-        'snow': '../assets/icons8-snow-101.png',
-        'sleet': '../assets/icons8-sleet-100.png',
-        'wind': '../assets/icons8-haze-100.png',
-        'fog': '../assets/icons8-fog-100.png',
-        'cloudy': '../assets/icons8-clouds-100.png',
-        'partly-cloudy-day': '../assets/icons8-partly-cloudy-day-100.png',
-        'partly-cloudy-night': '../assets/icons8-night-100.png',
-        'hail': '../assets/icons8-hail-100.png',
-        'thunderstorm': '../assets/icons8-cloud-lightning-filled-100.png',
-        'tornado': '../assets/icons8-tornado-100.png'
+        '01d': 'http://openweathermap.org/img/wn/01d@2x.png',
+        '02d': 'http://openweathermap.org/img/wn/02d@2x.png',
+        '03d': 'http://openweathermap.org/img/wn/03d@2x.png',
+        '04d': 'http://openweathermap.org/img/wn/04d@2x.png',
+        '09d': 'http://openweathermap.org/img/wn/09d@2x.png',
+        '10d': 'http://openweathermap.org/img/wn/10d@2x.png',
+        '11d': 'http://openweathermap.org/img/wn/11d@2x.png',
+        '13d': 'http://openweathermap.org/img/wn/13d@2x.png',
+        '50d': 'http://openweathermap.org/img/wn/50d@2x.png',
+        '01n': 'http://openweathermap.org/img/wn/01n@2x.png',
+        '02n': 'http://openweathermap.org/img/wn/02n@2x.png',
+        '03n': 'http://openweathermap.org/img/wn/03n@2x.png',
+        '04n': 'http://openweathermap.org/img/wn/04n@2x.png',
+        '09n': 'http://openweathermap.org/img/wn/09n@2x.png',
+        '10n': 'http://openweathermap.org/img/wn/10n@2x.png',
+        '11n': 'http://openweathermap.org/img/wn/11n@2x.png',
+        '13n': 'http://openweathermap.org/img/wn/13n@2x.png',
+        '50n': 'http://openweathermap.org/img/wn/50n@2x.png',
+        
       },
     };
   },
@@ -100,11 +100,11 @@ export default {
   methods: {
     updateLocation() {
       NProgress.start();
-      let loc = localStorage.location || 'lagos'
+      let loc = this.location || ''
       API.getForecast(loc).then(result => {
         this.forecast = result;
           NProgress.done()
-        console.log(JSON.stringify(this.forecast));
+        console.log(JSON.stringify(result));
       });
     }
   }
