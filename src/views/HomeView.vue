@@ -39,7 +39,10 @@
 // @ is an alias to /src
 import API from '../lib/API.js';
 import NProgress from 'nprogress'
-import clear from "../assets/icons8-night-100.png"
+
+//? TODO: FIX THE UI
+//? TODO: Convert sunset and sunrise to more readable time data
+//? TODO: Auto retrieve weather info based on geolocation
 
 export default {
   name: 'home',
